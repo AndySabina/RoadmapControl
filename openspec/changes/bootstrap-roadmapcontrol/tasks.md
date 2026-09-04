@@ -7,7 +7,7 @@
 | Estimated changed lines | 6,000–8,500 across 22 review slices |
 | 400-line budget risk | High |
 | Chained PRs recommended | Yes |
-| Suggested split | PR 1 → PR 2–7 read-only core → PR 8–12 install/audit/admission → PR 13–17 task and tracker delivery → PR 18–20 sync/adapters → PR 21–22 release/dogfood |
+| Suggested split | PR-00 governance prerequisite → PR 1 → PR 2–7 read-only core → PR 8–12 install/audit/admission → PR 13–17 task and tracker delivery → PR 18–20 sync/adapters → PR 21–22 release/dogfood |
 | Delivery strategy | ask-on-risk |
 | Chain strategy | pending |
 
@@ -20,13 +20,13 @@ Chain strategy: stacked-to-main|feature-branch-chain|size-exception|pending
 
 **Strict-TDD evidence rule:** after PR 1 establishes `go test ./...`, every behavior slice records (1) a committed RED test and observed failure, (2) minimal GREEN implementation and focused passing command, (3) a TRIANGULATE case/property/boundary test and cumulative passing command, and (4) a REFACTOR pass with behavior unchanged. Each slice also records a runtime/integration scenario and result, or `N/A` with why no runtime boundary exists.
 
-**Bootstrap boundary:** PRs 1–21 use ordinary repository/Gentle AI controls. Do not represent bootstrap history as RoadmapControl-governed. Dogfooding begins only in PR 22 after one complete validated control loop and explicit installation of an exact released pin.
+**Bootstrap boundary:** PR-00 and PRs 1–21 use ordinary repository/Gentle AI controls. Do not represent bootstrap history as RoadmapControl-governed. Dogfooding begins only in PR 22 after one complete validated control loop and explicit installation of an exact released pin.
 
 ## PR map
 
 ```text
 Ordinary bootstrap review
-PR-01 → PR-02 → PR-03 → PR-04 → PR-05 → PR-06 → PR-07
+PR-00 → PR-01 → PR-02 → PR-03 → PR-04 → PR-05 → PR-06 → PR-07
                          ↓
 PR-08 → PR-09 → PR-10 → PR-11 → PR-12 → PR-13 → PR-14 → PR-15
                                                      ↓
@@ -36,6 +36,13 @@ PR-22 (dogfood transition; new governed work starts after merge)
 ```
 
 ## Work units
+
+### PR-00 — Establish public repository governance before implementation
+- **Status:** completed prerequisite. **Dependencies:** none. **Tracker boundary:** documentation/configuration only; ordinary bootstrap controls.
+- **Allowed edit surfaces:** `LICENSE`, `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `CODE_OF_CONDUCT.md`, `.github/ISSUE_TEMPLATE/**`, `.github/PULL_REQUEST_TEMPLATE.md`, `docs/governance/README.md`, and this prerequisite entry.
+- **Tasks:** publish the Apache-2.0 license, honest bootstrap project status and boundaries, contribution/security/conduct policies, bounded issue forms, a pull-request gate template, and a governance-documentation chain tracker.
+- **Acceptance/evidence:** every artifact is read back; issue-form YAML parses with available standard tooling; `git diff --check` passes; exact line counts and cohesive review slices are recorded, with each slice at **≤400 additions + deletions**. No product implementation or GitHub mutation occurs.
+- **Rollback:** revert only the listed public governance documents; no RoadmapControl runtime authority or GitHub configuration is active.
 
 ### PR-01 — Bootstrap the Go module, test runner, and minimal unprivileged CI
 - **Estimate:** 180–280 lines. **Dependencies:** none. **Tracker boundary:** bootstrap foundation; ordinary controls only.
