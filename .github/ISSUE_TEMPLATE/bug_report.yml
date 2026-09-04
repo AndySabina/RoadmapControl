@@ -1,0 +1,77 @@
+name: Bug report
+description: Report a reproducible defect with bounded, sanitized evidence.
+title: "[Bug]: "
+labels:
+  - "type:bug"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a defect. An opened issue is a proposal for triage; it is not approved roadmap work and does not authorize implementation. Do not include secrets or private vulnerability details. Use the Security tab for security reports.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Defect summary
+      description: What happened, and what should have happened instead?
+      placeholder: A concise description of the observed and expected behavior.
+    validations:
+      required: true
+  - type: input
+    id: revision
+    attributes:
+      label: Version or revision
+      description: Release version or commit SHA, if known.
+      placeholder: v0.x.y or commit SHA
+    validations:
+      required: false
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      description: Select the closest initially supported environment.
+      options:
+        - Linux
+        - WSL2
+        - macOS
+        - Other or not applicable
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimal reproduction
+      description: Provide the smallest deterministic steps, commands, or repository shape needed to observe the defect.
+      placeholder: |
+        1. Given ...
+        2. Run ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Sanitized evidence
+      description: Paste only the shortest relevant output. Remove tokens, credentials, usernames, hostnames, private repository names, and private URLs.
+      render: shell
+    validations:
+      required: false
+  - type: textarea
+    id: impact
+    attributes:
+      label: Scope and impact
+      description: Who is affected, how often, and whether a safe workaround exists?
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Submission checks
+      options:
+        - label: I searched existing open and closed issues for the same defect.
+          required: true
+        - label: I removed secrets and private data from this report.
+          required: true
+        - label: I understand that filing this issue does not approve roadmap work or authorize implementation.
+          required: true
+        - label: This is not a private security vulnerability report.
+          required: true
