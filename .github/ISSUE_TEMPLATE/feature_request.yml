@@ -1,0 +1,61 @@
+name: Feature request
+description: Propose a bounded product outcome for discussion and roadmap consideration.
+title: "[Feature]: "
+labels:
+  - "type:feature"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Feature requests are inputs to planning. Opening this issue does not approve roadmap work, reserve priority, assign anyone, or authorize upstream implementation.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and user
+      description: What problem exists, for whom, and in what situation?
+      placeholder: When ... users need ... because ...
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: Describe the observable result, not only a preferred implementation.
+    validations:
+      required: true
+  - type: textarea
+    id: current_gap
+    attributes:
+      label: Current workaround or gap
+      description: How is this handled today, and why is that insufficient?
+    validations:
+      required: true
+  - type: textarea
+    id: boundaries
+    attributes:
+      label: Scope boundaries
+      description: Identify important constraints, non-goals, compatibility needs, and edge cases.
+      placeholder: |
+        In scope:
+        Out of scope:
+        Important edge cases:
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Supporting evidence
+      description: Add concise, sanitized examples or links. Do not include credentials or private repository data.
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Submission checks
+      options:
+        - label: I searched existing open and closed issues for a similar request.
+          required: true
+        - label: I removed secrets and private data from this request.
+          required: true
+        - label: I understand that filing this request does not approve, prioritize, assign, or authorize implementation.
+          required: true
