@@ -1,0 +1,62 @@
+# OpenSpec project context for RoadmapControl
+# Bootstrap configuration: implementation and test harness are not present yet.
+project:
+  name: RoadmapControl
+  repository: https://github.com/AndySabina/RoadmapControl
+  lifecycle: bootstrap
+  description: >-
+    A Go-based roadmap control system with GitHub Actions, YAML configuration,
+    JSON Schema validation, and Pi/OpenCode adapters.
+
+technology:
+  primary_language: Go
+  automation: GitHub Actions
+  configuration_format: YAML
+  schema_format: JSON Schema
+  adapters:
+    - Pi
+    - OpenCode
+  supported_platforms:
+    - Linux
+    - WSL2
+    - macOS
+
+testing:
+  strict_tdd: true
+  runner: unavailable
+  command: null
+  status: bootstrap_pending
+  notes: >-
+    No Go module, test files, Makefile, Taskfile, or CI workflow exists yet.
+    Establish the Go module and test command before implementation begins.
+
+phase_rules:
+  proposal:
+    required: true
+  spec:
+    required: true
+  design:
+    required: true
+  tasks:
+    required: true
+  apply:
+    requires:
+      - proposal
+      - spec
+      - design
+      - tasks
+    strict_tdd: true
+  verify:
+    requires:
+      - spec
+      - tasks
+      - apply
+    strict_tdd: true
+  archive:
+    requires:
+      - verify
+
+delivery:
+  strategy: ask-on-risk
+  review_changed_lines_budget: 400
+  commit_or_push_during_init: false
