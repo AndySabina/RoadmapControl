@@ -1,0 +1,10 @@
+name: Unsafe fixture
+on:
+  pull_request_target:
+permissions:
+  contents: write
+jobs:
+  unsafe:
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "${{ secrets.CONTROL_TOKEN }}"
