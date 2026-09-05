@@ -74,7 +74,7 @@ actionContext:
 
 | Command | Result |
 | --- | --- |
-| `GOTOOLCHAIN=go1.27.1 go test -count=1 ./internal/adapters/filesystem/...` | PASS |
+| `GOTOOLCHAIN=go1.27.1 go test -count=1 ./internal/adapters/filesystem/...` | PASS after JD-A-001/JD-B-001 unlisted-YAML-symlink correction |
 | `GOTOOLCHAIN=go1.27.1 go test -count=1 ./...` | PASS |
 | `gofmt -w internal/adapters/filesystem/manifest.go && git diff --check` | PASS |
 | `GOTOOLCHAIN=go1.27.1 go mod tidy` with pre/post `go.mod` and `go.sum` SHA-256 comparison | PASS; no dependency mutation |
@@ -85,7 +85,7 @@ Runtime evidence: N/A — this is a read-only library boundary exercised with `t
 
 | Task | RED | GREEN | TRIANGULATE | REFACTOR |
 | --- | --- | --- | --- | --- |
-| PR02A-2 loader | Committed RED above; correction RED observed for unlisted `nested/roadmap.yaml` | Focused loader suite passes after exempting only the root manifest | Existing nested/multiple, symlink-intermediate, unsafe-YAML, size, and unlisted-case tests pass | `gofmt`; behavior unchanged |
+| PR02A-2 loader | Committed RED above; corrections RED observed for unlisted `nested/roadmap.yaml` and unlisted `extra.yaml` symlink | Focused loader suite passes after exempting only the root manifest and rejecting the unlisted YAML symlink without following it | Existing nested/multiple, symlink-intermediate, unsafe-YAML, size, and unlisted-case tests pass | `gofmt`; behavior unchanged |
 
 ### Safety caveat and remaining work
 

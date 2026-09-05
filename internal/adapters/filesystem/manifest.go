@@ -121,7 +121,7 @@ func rejectUnlisted(root string, declared map[string]bool) error {
 		if err != nil {
 			return err
 		}
-		if entry.Type()&os.ModeSymlink != 0 || entry.IsDir() || !yamlPath(name) || name == filepath.Join(root, "roadmap.yaml") {
+		if entry.IsDir() || !yamlPath(name) || name == filepath.Join(root, "roadmap.yaml") {
 			return nil
 		}
 		rel, err := filepath.Rel(root, name)

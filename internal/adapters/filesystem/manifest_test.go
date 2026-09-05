@@ -55,6 +55,11 @@ func TestLoadRejectsUnsafeFilesystemInputs(t *testing.T) {
 			write(t, root, "extra.YML", "ok: true\n")
 			return root
 		}},
+		{"unlisted YAML symlink", func(t *testing.T, root string) string {
+			write(t, root, "roadmap.yaml", manifest(""))
+			symlink(t, filepath.Join(t.TempDir(), "missing.yaml"), filepath.Join(root, "extra.yaml"))
+			return root
+		}},
 		{"unlisted nested roadmap manifest", func(t *testing.T, root string) string {
 			write(t, root, "roadmap.yaml", manifest("listed.yaml"))
 			write(t, root, "listed.yaml", "ok: true\n")
