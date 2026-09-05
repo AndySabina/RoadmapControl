@@ -62,3 +62,58 @@ actionContext:
   warnings:
     - PR02 remains incomplete; filesystem delivery is deferred to PR02A-2.
 ```
+
+## PR02A-2 — filesystem manifest loader GREEN
+
+- **Delivery path / PR boundary:** approved chained PR02A-2 GREEN work unit, following PR02A-1; its boundary is read-only manifest acquisition and document safety only.
+- **RED baseline:** committed RED `154a8a6b866939a14999c488d875c6b7bc0f7a6e`; `GOTOOLCHAIN=go1.27.1 go test -count=1 ./internal/adapters/filesystem/...` failed with `undefined: Load` at the four test call sites before production code was written.
+- **Completed scope:** added `filesystem.Load(root)`, returning the typed `roadmap.Manifest` parsed by domain `ParseManifest`; it reads only declared nested/multiple modules and applies domain `ValidateYAML` to module documents. It checks root containment, symlink roots/files/intermediate components, regular files, and the 1 MiB bound before reads; it rejects unlisted case-insensitive YAML.
+- **Checkbox reconciliation:** no persisted task checkbox changed. The sole PR-02 task intentionally remains unchecked because schema resolution, hashing, typed module contracts, and CLI integration are deferred; this completed PR02A-2 slice has no separate task line.
+
+### Verification
+
+| Command | Result |
+| --- | --- |
+| `GOTOOLCHAIN=go1.27.1 go test -count=1 ./internal/adapters/filesystem/...` | PASS |
+| `GOTOOLCHAIN=go1.27.1 go test -count=1 ./...` | PASS |
+| `gofmt -w internal/adapters/filesystem/manifest.go && git diff --check` | PASS |
+| `GOTOOLCHAIN=go1.27.1 go mod tidy` with pre/post `go.mod` and `go.sum` SHA-256 comparison | PASS; no dependency mutation |
+
+Runtime evidence: N/A — this is a read-only library boundary exercised with `t.TempDir()`; no CLI is in scope. Rollback: remove `internal/adapters/filesystem/manifest.go` and the matching documentation/progress section without affecting the parser-only PR02A-1 work.
+
+### TDD Cycle Evidence
+
+| Task | RED | GREEN | TRIANGULATE | REFACTOR |
+| --- | --- | --- | --- | --- |
+| PR02A-2 loader | Committed RED above; correction RED observed for unlisted `nested/roadmap.yaml` | Focused loader suite passes after exempting only the root manifest | Existing nested/multiple, symlink-intermediate, unsafe-YAML, size, and unlisted-case tests pass | `gofmt`; behavior unchanged |
+
+### Safety caveat and remaining work
+
+Checks occur before `os.ReadFile`, avoiding intentional FIFO reads. This non-mutating cooperative boundary cannot guarantee safety against a hostile concurrent TOCTOU replacement; it makes no universal-race claim. Deferred: schema resolution, canonical hashing, typed module validation/contracts, and CLI.
+
+**Pending GREEN commit:** parent retains Git authority; no commit, push, reset, or other worktree/authority mutation was performed here.
+
+### Status and remaining persisted work
+
+```yaml
+changeName: bootstrap-roadmapcontrol
+artifactStore: openspec
+applyState: ready
+actionContext:
+  mode: repo-local
+  workspaceRoot: /home/andyf/Projects/RoadmapControl-pr02a2
+  allowedEditRoots: [internal/adapters/filesystem, docs, openspec/changes/bootstrap-roadmapcontrol]
+  warnings: [PR-02 remains incomplete beyond PR02A-2]
+```
+
+Exact unchecked persisted completion lines remain (global, untouched):
+- [ ] Each PR has a verified additions+deletions count of 400 or less before review; an indivisible overage stops for an audited owner `size:exception`.
+- [ ] Each behavioral PR contains RED → GREEN → TRIANGULATE → REFACTOR evidence, focused/cumulative tests, runtime evidence or N/A, and its own docs.
+- [ ] Every requirement in `specs/roadmap-domain`, `task-execution`, `delivery-release`, `github-operations`, `synchronization`, `agent-integration`, and `audit-lifecycle` is covered by at least one listed slice.
+- [ ] PR-21 proves one complete validated control loop before PR-22 enables prospective dogfooding.
+- [ ] No implementation, commit, push, issue, PR, GitHub permission/App change, or repository-rule mutation is performed by this planning phase.
+
+## Key Learnings
+
+- Validate each component below the selected root, not only the final module pathname, to reject an intermediate symlink escape.
+- A pre-read regular-file and size check reduces accidental unsafe reads but is not a hostile-race guarantee.

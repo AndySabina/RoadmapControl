@@ -12,8 +12,8 @@ const testManifest = "schema: https://schemas.example/v1\nmodules: [%s]\n"
 
 func TestLoadReadsNestedDeclaredModulesWithoutWriting(t *testing.T) {
 	root := t.TempDir()
-	write(t, root, "roadmap.yaml", manifest("nested/one.yaml, two.YML"))
-	write(t, root, "nested/one.yaml", "name: one\n")
+	write(t, root, "roadmap.yaml", manifest("nested/roadmap.yaml, two.YML"))
+	write(t, root, "nested/roadmap.yaml", "name: one\n")
 	write(t, root, "two.YML", "name: two\n")
 
 	got, err := Load(root)
@@ -24,8 +24,8 @@ func TestLoadReadsNestedDeclaredModulesWithoutWriting(t *testing.T) {
 		t.Fatalf("loaded modules = %#v", got.Manifest.Modules)
 	}
 	for name, want := range map[string]string{
-		"nested/one.yaml": "name: one\n",
-		"two.YML":         "name: two\n",
+		"nested/roadmap.yaml": "name: one\n",
+		"two.YML":             "name: two\n",
 	} {
 		data, err := os.ReadFile(filepath.Join(root, name))
 		if err != nil || string(data) != want {
@@ -53,6 +53,12 @@ func TestLoadRejectsUnsafeFilesystemInputs(t *testing.T) {
 			write(t, root, "roadmap.yaml", manifest("listed.yaml"))
 			write(t, root, "listed.yaml", "ok: true\n")
 			write(t, root, "extra.YML", "ok: true\n")
+			return root
+		}},
+		{"unlisted nested roadmap manifest", func(t *testing.T, root string) string {
+			write(t, root, "roadmap.yaml", manifest("listed.yaml"))
+			write(t, root, "listed.yaml", "ok: true\n")
+			write(t, root, "nested/roadmap.yaml", "ok: true\n")
 			return root
 		}},
 		{"manifest directory", func(t *testing.T, root string) string {
