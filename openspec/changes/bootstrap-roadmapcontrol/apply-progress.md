@@ -1,6 +1,18 @@
 # Apply Progress: Bootstrap RoadmapControl
 
-## PR02A-1 — parser-only split
+## Current merged checkpoint — tracker `1e4c0c9`
+
+PR-01 is complete (PR #30; issue #28 closed). Original PR-02 remains incomplete, refined into PR02A-1, PR02A-2, PR02B, and PR02C; PR-03 through PR-22 are not started and cumulative completion checks remain unchecked. This is not final SDD sync or archive, and no `.roadmap/` installation has occurred.
+
+- **PR02A-1:** merged PR #34 (issue #32 closed), 335 lines, parser commit `e9a81d2`. RED was reconstructed at `1ecb062` and GREEN at `e9a81d2`; the reconstructed RED is not claimed as original authorship.
+- **PR02A-2:** merged PR #35 (issue #33 closed), 380 lines: committed RED `154a8a6`, GREEN `b80a9dc`, and correction `d84c76f`.
+- **Merge and review evidence:** #35 merged into #34 at `5413f91`, then #34 into the tracker at `1e4c0c9`; combined tree `02602d3` is the exact Judgment Day-approved child. Each standalone child is Judgment Day-approved, not an ordinary RDD receipt. The 709-line aggregate is two previously reviewed slices, not a new ≤400-line PR.
+- **CI evidence:** [parser](https://github.com/AndySabina/RoadmapControl/actions/runs/33987090042), [child](https://github.com/AndySabina/RoadmapControl/actions/runs/33987169434), and [integration](https://github.com/AndySabina/RoadmapControl/actions/runs/33989322955). Go 1.27.1 configuration and dependency tests are present; this checkpoint does not assert tests were run today.
+- **Pending approval:** PR02B needs human approval for the minimal typed module contracts and canonical-JSON proposal. PR02C then supplies generic typed loading, offline schema resolution, hashing, and CLI integration. Neither may accept arbitrary opaque modules as a substitute.
+- **Preserved state:** failed candidate `4191234` remains superseded and unmerged; tracker PR #31 is draft with no merge, issue #27 remains open, and `main` remains at `4acf0f5`. The tracker is synced at `1e4c0c9`; the parser branch retains `5413f91` and the filesystem branch retains `d84c76f`. The original two dirty documentation files remain preserved.
+- **Current rollback boundary:** roll back a selected PR02A slice only with its matching production files, tests, and documentation/progress evidence; do not alter the other slice, the historical archive evidence, or merged history.
+
+## Historical inherited record — PR02A-1 parser-only split
 
 - **Delivery path:** approved chained split; this is PR02A-1 (parser-only) and remains at or below the 400 changed-line budget.
 - **Completed scope:** retained the typed, filesystem-independent manifest parser and its tests in `internal/domain/roadmap/`, plus its YAML dependency in `go.mod`/`go.sum`; added the concise parser-boundary documentation in `docs/roadmap-format.md`.
@@ -63,7 +75,7 @@ actionContext:
     - PR02 remains incomplete; filesystem delivery is deferred to PR02A-2.
 ```
 
-## PR02A-2 — filesystem manifest loader GREEN
+## Historical inherited record — PR02A-2 filesystem manifest loader GREEN
 
 - **Delivery path / PR boundary:** approved chained PR02A-2 GREEN work unit, following PR02A-1; its boundary is read-only manifest acquisition and document safety only.
 - **RED baseline:** committed RED `154a8a6b866939a14999c488d875c6b7bc0f7a6e`; `GOTOOLCHAIN=go1.27.1 go test -count=1 ./internal/adapters/filesystem/...` failed with `undefined: Load` at the four test call sites before production code was written.
@@ -91,7 +103,7 @@ Runtime evidence: N/A — this is a read-only library boundary exercised with `t
 
 Checks occur before `os.ReadFile`, avoiding intentional FIFO reads. This non-mutating cooperative boundary cannot guarantee safety against a hostile concurrent TOCTOU replacement; it makes no universal-race claim. Deferred: schema resolution, canonical hashing, typed module validation/contracts, and CLI.
 
-**Pending GREEN commit:** parent retains Git authority; no commit, push, reset, or other worktree/authority mutation was performed here.
+**Historical source-state note:** this pre-merge record said “Pending GREEN commit: parent retains Git authority; no commit, push, reset, or other worktree/authority mutation was performed here.” It is preserved as historical evidence only; PR02A-2 is now merged as recorded in the current checkpoint.
 
 ### Status and remaining persisted work
 
