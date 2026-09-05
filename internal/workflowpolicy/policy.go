@@ -25,9 +25,36 @@ func Validate(workflow []byte) []string {
 	}
 
 	scanner := bufio.NewScanner(bytes.NewReader(workflow))
+	permissionsIndent := -1
 	for scanner.Scan() {
-		line := strings.TrimSpace(scanner.Text())
-		if strings.HasSuffix(line, ": write") {
+		rawLine := scanner.Text()
+		indent := len(rawLine) - len(strings.TrimLeft(rawLine, " "))
+		line := strings.TrimSpace(strings.SplitN(rawLine, "#", 2)[0])
+		if line == "" {
+			continue
+		}
+		if strings.HasPrefix(line, "permissions:") {
+			permissionsIndent = indent
+			permission := strings.TrimSpace(strings.TrimPrefix(line, "permissions:"))
+			if permission == "write-all" {
+				violations = append(violations, "write permission is forbidden")
+			}
+			if strings.HasPrefix(permission, "{") && strings.HasSuffix(permission, "}") {
+				for _, entry := range strings.Split(strings.TrimSuffix(strings.TrimPrefix(permission, "{"), "}"), ",") {
+					_, access, isPermission := strings.Cut(entry, ":")
+					if isPermission && strings.TrimSpace(access) == "write" {
+						violations = append(violations, "write permission is forbidden")
+					}
+				}
+			}
+			continue
+		}
+		if permissionsIndent < 0 || indent <= permissionsIndent {
+			permissionsIndent = -1
+			continue
+		}
+		_, access, isPermission := strings.Cut(line, ":")
+		if isPermission && strings.TrimSpace(access) == "write" {
 			violations = append(violations, "write permission is forbidden")
 		}
 	}
