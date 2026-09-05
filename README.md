@@ -2,7 +2,7 @@
 
 RoadmapControl is a planned GitHub-native control system for keeping approved roadmap work traceable from planning through execution, review, and release.
 
-> **Bootstrap status:** planning is complete, but implementation has not started. This repository does not yet provide a working CLI, GitHub Actions integration, roadmap enforcement, task leases, or agent controls.
+> **Bootstrap status:** implementation has started with a minimal Go composition root and unprivileged pull-request verification. The `roadmapctl` executable currently provides bootstrap help only—there are no product commands, roadmap enforcement, task leases, or agent controls.
 
 ## The problem
 
@@ -44,6 +44,15 @@ GitHub Enterprise Server, native Windows, cross-repository dependencies, and mul
 ## Hosting and privacy boundary
 
 The first release is planned without a RoadmapControl SaaS or publisher-operated backend. It will not collect telemetry, store publisher-managed tokens, or transfer RoadmapControl data outside GitHub. Local tooling will reuse established authentication mechanisms rather than persist user tokens.
+
+## Local bootstrap prerequisites
+
+Install Go 1.27.1, then run the local checks from the repository root:
+
+```sh
+go test ./...
+go run ./cmd/roadmapctl --help
+```
 
 ## Documentation
 
