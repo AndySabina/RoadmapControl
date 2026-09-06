@@ -22,6 +22,19 @@ The parser accepts exactly one UTF-8 YAML document of at most 1 MiB and depth at
 
 Loading is non-mutating and rejects unsafe files before reading them, so it does not intentionally read a FIFO. This is a cooperative boundary: a hostile concurrent filesystem change can still race check-then-read operations; it does not claim universal TOCTOU safety.
 
+## Policy module contract (PR02B1)
+
+`ParsePolicyRoadmap(manifest, policyYAML)` reads the only currently typed module contract. Its manifest must name exactly the immutable `RoadmapSchemaURI` value, `https://github.com/AndySabina/RoadmapControl/schemas/roadmap/v1/schema.json`, and exactly one module: `policy.yaml`. Other absolute URIs remain valid manifest syntax but are not policy contracts.
+
+The policy document is one safe YAML mapping with exactly these required fields:
+
+```yaml
+kind: policy
+additional_tracker_types: [initiative]
+```
+
+`additional_tracker_types` is a sequence of strings. Empty strings, duplicate names, and built-in tracker names are structurally retained; later business-policy work decides their meaning. Unknown, duplicate, missing, null, or wrong-type fields are rejected. The returned `PolicyRoadmap` has read-only accessors (`Schema`, `ModulePath`, and `AdditionalTrackerTypes`); the slice accessor returns a defensive copy.
+
 ## Not included
 
-The loader does not discover implicit modules, return catchall module content, resolve schemas, validate typed module fields, produce hashes, or expose a CLI. Schema resolution, hashing, module typed contracts, and CLI integration remain deferred.
+The loader does not discover implicit modules, return catchall module content, resolve schemas, validate typed module fields beyond the policy contract, produce hashes, or expose a CLI. Schema resolution, hashing, further module typed contracts, and CLI integration remain deferred. `filesystem.Load` remains unchanged: this contract consumes the manifest and policy YAML supplied by its caller and performs no filesystem access.
