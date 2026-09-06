@@ -2,7 +2,7 @@
 
 RoadmapControl is a planned GitHub-native control system for keeping approved roadmap work traceable from planning through execution, review, and release.
 
-> **Bootstrap status:** implementation has started with a minimal Go composition root and unprivileged pull-request verification. The `roadmapctl` executable currently provides bootstrap help only—there are no product commands, roadmap enforcement, task leases, or agent controls.
+> **Bootstrap status:** implementation has started with a Go harness, typed manifest parser, and contained filesystem library. The `roadmapctl` executable still provides bootstrap help only—there is no `validate` command, governance, task leases, enforcement, or agent control.
 
 ## The problem
 
@@ -50,7 +50,7 @@ The first release is planned without a RoadmapControl SaaS or publisher-operated
 Install Go 1.27.1, then run the local checks from the repository root:
 
 ```sh
-go test ./...
+GOTOOLCHAIN=go1.27.1 go test ./...
 go run ./cmd/roadmapctl --help
 ```
 
@@ -62,6 +62,7 @@ go run ./cmd/roadmapctl --help
 - [Governance documentation tracker](docs/governance/README.md)
 - [Approved bootstrap proposal](openspec/changes/bootstrap-roadmapcontrol/proposal.md)
 - [Implementation plan](openspec/changes/bootstrap-roadmapcontrol/tasks.md)
+- [Approved PR02B contract addendum](openspec/changes/bootstrap-roadmapcontrol/pr-02b-contract-proposal.md)
 
 ## License
 

@@ -2,7 +2,7 @@
 
 This OpenSpec change captures the approved product boundary, behavioral requirements, technical architecture, and implementation plan for the first RoadmapControl release.
 
-## Documentation chain
+## Documentation chain (historical planning record)
 
 1. Product proposal
 2. Roadmap, task-execution, and synchronization specifications
@@ -12,7 +12,7 @@ This OpenSpec change captures the approved product boundary, behavioral requirem
 6. Operational resilience, verification, rollout, and traceability design
 7. Reviewable implementation task plan
 
-Each child pull request is documentation-only and must remain within the 400 changed-line review budget. The tracker pull request remains a draft until every child has been reviewed and integrated.
+This was the original documentation-only chain. Current bootstrap delivery includes merged implementation slices and remains bounded to 400 changed lines per child; the tracker remains a draft until its required children are reviewed and integrated.
 
 ## Bootstrap boundary
 

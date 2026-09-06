@@ -9,16 +9,16 @@
 | Chained PRs recommended | Yes |
 | Suggested split | PR-00 governance prerequisite → PR 1 → PR 2–7 read-only core → PR 8–12 install/audit/admission → PR 13–17 task and tracker delivery → PR 18–20 sync/adapters → PR 21–22 release/dogfood |
 | Delivery strategy | ask-on-risk |
-| Chain strategy | pending |
+| Chain strategy | feature-branch-chain |
 
-Decision needed before apply: Yes
+Decision needed before apply: No for approved PR02B1/PR02B2 issue scope; `feature-branch-chain` is already selected. Future scope expansion needs approval.
 Chained PRs recommended: Yes
-Chain strategy: stacked-to-main|feature-branch-chain|size-exception|pending
-400-line budget risk: Low|Medium|High
+Chain strategy: feature-branch-chain
+400-line budget risk: High
 
-**Delivery gate:** this plan intentionally does not choose a chain strategy. Before applying PR 1, ask the maintainer to select `stacked-to-main` or `feature-branch-chain`. Every slice below is a normal PR capped at **≤400 additions + deletions**, including tests, documentation, configuration, and fixtures; do not reduce scope by code-golfing or separating behavior from its tests/docs. Each PR body must name its predecessor, successor, current position, and a dependency diagram with the current slice marked `📍`.
+**Delivery gate:** every child slice is capped at **≤400 additions + deletions**, including tests, documentation, configuration, and fixtures; do not reduce scope by code-golfing or separating behavior from its tests/docs. Each PR body must name its predecessor, successor, current position, and a dependency diagram with the current slice marked `📍`.
 
-**Strict-TDD evidence rule:** after PR 1 establishes `go test ./...`, every behavior slice records (1) a committed RED test and observed failure, (2) minimal GREEN implementation and focused passing command, (3) a TRIANGULATE case/property/boundary test and cumulative passing command, and (4) a REFACTOR pass with behavior unchanged. Each slice also records a runtime/integration scenario and result, or `N/A` with why no runtime boundary exists.
+**Strict-TDD evidence rule:** after PR 1 establishes `go test ./...`, every behavior slice records (1) a committed local RED test and observed failure before GREEN; the failed intermediate head is evidence only and must never itself be pushed or published; its RED commit may appear in a passed candidate's ancestry only when the passed candidate HEAD is the ref pushed or published; (2) minimal GREEN implementation and focused passing command, (3) a TRIANGULATE case/property/boundary test and cumulative passing command, and (4) a REFACTOR pass with behavior unchanged. The completed candidate then receives focused and cumulative verification followed by Judgment Day final verification before its delivery commit, push, or draft PR publication. Each slice also records a runtime/integration scenario and result, or `N/A` with why no runtime boundary exists.
 
 **Bootstrap boundary:** PR-00 and PRs 1–21 use ordinary repository/Gentle AI controls. Do not represent bootstrap history as RoadmapControl-governed. Dogfooding begins only in PR 22 after one complete validated control loop and explicit installation of an exact released pin.
 
@@ -26,7 +26,7 @@ Chain strategy: stacked-to-main|feature-branch-chain|size-exception|pending
 
 ```text
 Ordinary bootstrap review
-PR-00 → PR-01 → PR-02 → PR-03 → PR-04 → PR-05 → PR-06 → PR-07
+PR-00 → PR-01 → PR-02A-1 → PR-02A-2 → PR-02B1 → PR-02B2 → PR-02C → PR-03 → PR-04 → PR-05 → PR-06 → PR-07
                          ↓
 PR-08 → PR-09 → PR-10 → PR-11 → PR-12 → PR-13 → PR-14 → PR-15
                                                      ↓
@@ -45,7 +45,7 @@ PR-22 (dogfood transition; new governed work starts after merge)
 - **Rollback:** revert only the listed public governance documents; no RoadmapControl runtime authority or GitHub configuration is active.
 
 ### PR-01 — Bootstrap the Go module, test runner, and minimal unprivileged CI
-- **Estimate:** 180–280 lines. **Dependencies:** none. **Tracker boundary:** bootstrap foundation; ordinary controls only.
+- **Status:** completed in PR #30; issue #28 closed. **Estimate:** 180–280 lines. **Dependencies:** none. **Tracker boundary:** bootstrap foundation; ordinary controls only.
 - **Allowed edit surfaces:** `go.mod`, `go.sum`, `cmd/roadmapctl/`, `internal/**`, `.github/workflows/verify-pr.yml`, `README.md`, `.gitignore`.
 - **Tasks:**
   1. Create module `github.com/AndySabina/RoadmapControl`, pin the supported Go toolchain, and add a minimal `roadmapctl` composition root with no product command.
@@ -55,11 +55,22 @@ PR-22 (dogfood transition; new governed work starts after merge)
 - **Rollback:** revert only the listed bootstrap files; no RoadmapControl authority, refs, secrets, or repository settings exist.
 
 ### PR-02 — Validate canonical roadmap modules and schema pins in read-only mode
-- **Estimate:** 280–380 lines. **Dependencies:** PR-01. **Tracker boundary:** read-only core.
-- **Allowed edit surfaces:** `internal/domain/roadmap/**`, `internal/adapters/filesystem/**`, `internal/ports/**`, `schemas/roadmap/v1/**`, `testdata/roadmap/**`, `docs/roadmap-format.md`.
+- **Status:** incomplete. The original PR-02 scope is refined into PR02A-1, PR02A-2, PR02B1, PR02B2, and PR02C below; PR-03 through PR-22 are not started and cumulative checks remain unchecked. **Dependencies:** PR-01. **Tracker boundary:** read-only core.
+- **Allowed edit surfaces:** `internal/domain/roadmap/**`, `internal/adapters/filesystem/**`, `internal/ports/**`, `schemas/roadmap/v1/**`, `testdata/roadmap/**`, `docs/roadmap-format.md`. Previously authorized ancillary surfaces: minimal `cmd/roadmapctl/**` wiring, `go.mod`, `go.sum`, and this change's `apply-progress.md`; each remaining slice must narrow these surfaces before implementation.
 - **Tasks:** implement explicit module-manifest loading, hardened YAML decoding, canonical JSON hashing, offline relative schema resolution, and read-only `roadmapctl validate` output.
 - **Acceptance/evidence:** RED malformed/unknown/missing module tests; GREEN valid modular roadmap; TRIANGULATE duplicate-key, non-UTF-8, alias-bound, and schema-pin cases; REFACTOR package boundaries. `go test ./internal/domain/roadmap/... ./internal/adapters/filesystem/...` and cumulative suite pass. Runtime: validate a valid and invalid fixture without writes.
 - **Rollback:** remove loader/schema/docs/fixtures only; no `.roadmap/` installation or GitHub mutation.
+
+#### PR-02 delivery reconciliation
+
+- **PR02A-1:** completed in PR #34 (issue #32 closed): typed manifest parser and safety boundaries, **335 lines**, commit `e9a81d2`. Its RED evidence was reconstructed at `1ecb062`, not claimed as original authorship.
+- **PR02A-2:** completed in PR #35 (issue #33 closed): contained filesystem loading, **380 lines**, commits `b80a9dc` with correction `d84c76f`. Its committed RED is `154a8a6`.
+- **Integration:** PR #35 merged into #34 at `5413f91`; PR #34 then merged into tracker at `1e4c0c9`. The resulting `02602d3` tree is the exact Judgment Day-approved combined child. Each standalone child is Judgment Day-approved, not an ordinary RDD receipt. The 709-line tracker aggregate is two previously reviewed slices, not a new ≤400-line single PR.
+- **Superseded candidate:** preserve failed candidate `4191234` as evidence; it was not merged. Tracker PR #31 remains draft and unmerged, issue #27 remains open, and `main` remains untouched at `4acf0f5`.
+- **Next:** original PR-02 remains unchecked. Approved docs [issue #38](https://github.com/AndySabina/RoadmapControl/issues/38) splits the remaining PR02B work into todo B1, then B2.
+- [x] **B1 [approved and assigned issue #39](https://github.com/AndySabina/RoadmapControl/issues/39):** `internal/domain/roadmap/module.go`, `internal/domain/roadmap/module_test.go`, and `docs/roadmap-format.md`; **~180–300 lines**. Published as draft PR #42 at `4a1ed67`, with CI and Judgment Day approved; it is not merged.
+- [x] **B2 [approved and assigned issue #40](https://github.com/AndySabina/RoadmapControl/issues/40):** `internal/domain/roadmap/canonical.go`, `internal/domain/roadmap/canonical_test.go`, shared format docs, and conditional `go.mod`/`go.sum`; **~180–350 lines**. Local implementation and focused/cumulative tests pass; independent verification, Judgment Day, and delivery remain pending.
+- **Both:** strict TDD, focused Go 1.27.1 tests, verification then Judgment Day, and rollback with their tests/docs/dependency changes. PR02C remains pending for generic typed loading, offline schema resolution, hashing, and CLI integration; neither slice may substitute arbitrary opaque modules for typed contracts. No `.roadmap/` installation is authorized.
 
 ### PR-03 — Enforce hierarchy, immutable identifiers, states, and derived progress
 - **Estimate:** 300–390 lines. **Dependencies:** PR-02. **Tracker boundary:** read-only core.
