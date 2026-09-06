@@ -1,5 +1,4 @@
 # OpenSpec project context for RoadmapControl
-# Bootstrap configuration: implementation and test harness are not present yet.
 project:
   name: RoadmapControl
   repository: https://github.com/AndySabina/RoadmapControl
@@ -23,12 +22,12 @@ technology:
 
 testing:
   strict_tdd: true
-  runner: unavailable
-  command: null
-  status: bootstrap_pending
+  runner: Go
+  command: GOTOOLCHAIN=go1.27.1 go test ./...
+  status: in_progress
   notes: >-
-    No Go module, test files, Makefile, Taskfile, or CI workflow exists yet.
-    Establish the Go module and test command before implementation begins.
+    The Go module, test files, and CI workflow are present. This configuration
+    records the available test command; it does not assert a test run today.
 
 phase_rules:
   proposal:

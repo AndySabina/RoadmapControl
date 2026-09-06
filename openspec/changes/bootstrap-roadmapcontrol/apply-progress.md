@@ -1,0 +1,251 @@
+# Apply Progress: Bootstrap RoadmapControl
+
+## Current approved checkpoint — PR02B2 locally implemented, pending independent verification and delivery
+
+PR02B1 is published as draft PR #42 at `4a1ed6704a4d4f37d8b83a72050073ec9b826766`, based on PR #41 `a3fcaa0`; its published tree is `086d149`, base-relative budget is 262 additions plus deletions, CI passed at <https://github.com/AndySabina/RoadmapControl/actions/runs/34046091633/job/101521279500>, and Judgment Day is approved with no severe findings or fixes. PR02B2 is locally implemented after that head; independent verification, Judgment Day, delivery commit, push, and PR remain pending. PR02C and whole PR-02 remain incomplete. This is not final SDD sync or archive, and no `.roadmap/` installation has occurred.
+
+## Historical inherited checkpoint — PR02B1 local pre-publication record
+
+PR-01 is complete (PR #30; issue #28 closed). Original PR-02 remains incomplete, refined into PR02A-1, PR02A-2, PR02B1, PR02B2, and PR02C; PR-03 through PR-22 are not started and cumulative completion checks remain unchecked. Approved [issue #38](https://github.com/AndySabina/RoadmapControl/issues/38) records the PR02B contract; PR02B1 is implemented locally with tests passing, while independent verification, Judgment Day, and delivery remain pending. PR02B2 and PR02C are not implemented or published. This is not final SDD sync or archive, and no `.roadmap/` installation has occurred.
+
+- **PR02A-1:** merged PR #34 (issue #32 closed), 335 lines, parser commit `e9a81d2`. RED was reconstructed at `1ecb062` and GREEN at `e9a81d2`; the reconstructed RED is not claimed as original authorship.
+- **PR02A-2:** merged PR #35 (issue #33 closed), 380 lines: committed RED `154a8a6`, GREEN `b80a9dc`, and correction `d84c76f`.
+- **Merge and review evidence:** #35 merged into #34 at `5413f91`, then #34 into the tracker at `1e4c0c9`; combined tree `02602d3` is the exact Judgment Day-approved child. Each standalone child is Judgment Day-approved, not an ordinary RDD receipt. The 709-line aggregate is two previously reviewed slices, not a new ≤400-line PR.
+- **CI evidence:** [parser](https://github.com/AndySabina/RoadmapControl/actions/runs/33987090042), [child](https://github.com/AndySabina/RoadmapControl/actions/runs/33987169434), and [integration](https://github.com/AndySabina/RoadmapControl/actions/runs/33989322955). Go 1.27.1 configuration and dependency tests are present; this checkpoint does not assert tests were run today.
+- **Approved work:** issue [#38](https://github.com/AndySabina/RoadmapControl/issues/38) approves the bounded PR02B contract. Todo B1 [#39](https://github.com/AndySabina/RoadmapControl/issues/39) is locally implemented as the typed decoder/constructor slice, with independent verification, Judgment Day, and delivery pending; todo B2 [#40](https://github.com/AndySabina/RoadmapControl/issues/40) is the conditional JCS wrapper slice and is not implemented. Each remains bounded to its approved paths, strict TDD, Go 1.27.1 verification, and Judgment Day after verification. PR02C is not implemented and remains pending for generic typed loading, offline schema resolution, hashing, and CLI integration; neither may accept arbitrary opaque modules as a substitute. Future out-of-scope expansion requires approval.
+- **Preserved state:** failed candidate `4191234` remains superseded and unmerged; tracker PR #31 is draft with no merge, issue #27 remains open, and `main` remains at `4acf0f5`. The tracker is synced at `1e4c0c9`; the parser branch retains `5413f91` and the filesystem branch retains `d84c76f`. The original two dirty documentation files remain preserved.
+- **Current rollback boundary:** roll back a selected PR02A slice only with its matching production files, tests, and documentation/progress evidence; do not alter the other slice, the historical archive evidence, or merged history.
+
+## Historical inherited record — PR02A-1 parser-only split
+
+- **Delivery path:** approved chained split; this is PR02A-1 (parser-only) and remains at or below the 400 changed-line budget.
+- **Completed scope:** retained the typed, filesystem-independent manifest parser and its tests in `internal/domain/roadmap/`, plus its YAML dependency in `go.mod`/`go.sum`; added the concise parser-boundary documentation in `docs/roadmap-format.md`.
+- **Deferred scope:** filesystem loading remains PR02A-2. Before removing the active filesystem files, their SHA-256 values were confirmed byte-for-byte equal to the preserved archive:
+  - `internal/adapters/filesystem/manifest.go`: `26eeb27962d533183ab94a2e86e0f6a011966932db73874804a01ce23c1a3647`
+  - `internal/adapters/filesystem/manifest_test.go`: `4d7c399bea5970c41c7e940274c48ca6483bd59174dce71a3427a942d0989d4c`
+  - archive locator: `/home/andyf/Projects/RoadmapControl-local-archive/pr02a-before-split-20260905/` (`SHA256SUMS`).
+- **No success claim for the removed loader:** PR02 remains incomplete. This slice has no filesystem API, CLI, hashing, schema resolution, module-content validation, or module-schema semantics.
+
+## Verification
+
+| Command | Result |
+| --- | --- |
+| `GOTOOLCHAIN=go1.27.1 go test -count=1 ./internal/domain/roadmap/...` | PASS after the Judgment Day correction |
+| `GOTOOLCHAIN=go1.27.1 go test -count=1 ./...` | PASS after the Judgment Day correction |
+| `gofmt -w internal/domain/roadmap/manifest.go internal/domain/roadmap/manifest_test.go && git diff --check` | PASS after the Judgment Day correction |
+| `GOTOOLCHAIN=go1.27.1 go mod tidy` followed by SHA-256 comparison of `go.mod` and `go.sum` | PASS; no tidy mutation |
+| Changed-line ledger vs `4f3e3f69bb67c352aea1f6063da0bd345c7f0682` (including docs and untracked files) | 335 additions + 0 deletions = **335** |
+
+Runtime evidence: N/A — PR02A-1 provides a parser package only; no CLI or filesystem boundary is included.
+
+## TDD Cycle Evidence
+
+| Task | Test file | Layer | Safety net | RED | GREEN | TRIANGULATE | REFACTOR |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| PR02A-1 parser partition | `internal/domain/roadmap/manifest_test.go` | Unit | Focused and full suite passed before partition | Historical uncommitted RED observed for undefined `ParseManifest`/`Load`; no committed chronology is claimed, and it is not evidence for the later URI correction | Existing parser tests pass | Existing table cases cover valid input and unsafe YAML/path boundaries | No behavior refactor; filesystem code removed only after archive verification |
+
+## Judgment Day correction round1
+
+- JD-A-001/JD-B-001 reject malformed opaque URI escapes and characters without fetching; HTTPS, URN, and hostless file URIs remain valid.
+- JD-A-002 rejects NUL module paths; JD-A-003/JD-B-002 reject non-string mapping keys before YAML decoding can collapse semantic duplicates.
+- **RED (observed):** `GOTOOLCHAIN=go1.27.1 go test -count=1 ./internal/domain/roadmap/...` failed for the two malformed URIs, NUL path, and duplicate-key cases before the production fix.
+- **GREEN/TRIANGULATE (observed):** the same focused command passed after the fix, retaining HTTPS, URN, hostless file, relative, and invalid URI boundaries.
+
+## Task status and next work
+
+The persisted PR-02 task remains unchecked because its complete loader/schema/CLI scope is not complete. No task checkbox was changed. PR02A-2 must restore the filesystem files from the recorded archive and independently verify its loader behavior.
+
+## Rollback
+
+To remove only this correction, revert `internal/domain/roadmap/manifest.go`, `internal/domain/roadmap/manifest_test.go`, and this progress file. Do not delete or alter the PR02A-2 archive; it is the deferred filesystem rollback/recovery source.
+
+## Status consumed
+
+```yaml
+schemaName: spec-driven
+changeName: bootstrap-roadmapcontrol
+artifactStore: openspec
+applyState: ready
+actionContext:
+  mode: repo-local
+  workspaceRoot: /home/andyf/Projects/RoadmapControl-pr02a
+  allowedEditRoots:
+    - /home/andyf/Projects/RoadmapControl-pr02a/internal/domain/roadmap
+    - /home/andyf/Projects/RoadmapControl-pr02a/internal/adapters/filesystem
+    - /home/andyf/Projects/RoadmapControl-pr02a
+    - /home/andyf/Projects/RoadmapControl-pr02a/docs
+    - /home/andyf/Projects/RoadmapControl-pr02a/openspec/changes/bootstrap-roadmapcontrol
+  warnings:
+    - PR02 remains incomplete; filesystem delivery is deferred to PR02A-2.
+```
+
+## Historical inherited record — PR02A-2 filesystem manifest loader GREEN
+
+- **Delivery path / PR boundary:** approved chained PR02A-2 GREEN work unit, following PR02A-1; its boundary is read-only manifest acquisition and document safety only.
+- **RED baseline:** committed RED `154a8a6b866939a14999c488d875c6b7bc0f7a6e`; `GOTOOLCHAIN=go1.27.1 go test -count=1 ./internal/adapters/filesystem/...` failed with `undefined: Load` at the four test call sites before production code was written.
+- **Completed scope:** added `filesystem.Load(root)`, returning the typed `roadmap.Manifest` parsed by domain `ParseManifest`; it reads only declared nested/multiple modules and applies domain `ValidateYAML` to module documents. It checks root containment, symlink roots/files/intermediate components, regular files, and the 1 MiB bound before reads; it rejects unlisted case-insensitive YAML.
+- **Checkbox reconciliation:** no persisted task checkbox changed. The sole PR-02 task intentionally remains unchecked because schema resolution, hashing, typed module contracts, and CLI integration are deferred; this completed PR02A-2 slice has no separate task line.
+
+### Verification
+
+| Command | Result |
+| --- | --- |
+| `GOTOOLCHAIN=go1.27.1 go test -count=1 ./internal/adapters/filesystem/...` | PASS after JD-A-001/JD-B-001 unlisted-YAML-symlink correction |
+| `GOTOOLCHAIN=go1.27.1 go test -count=1 ./...` | PASS |
+| `gofmt -w internal/adapters/filesystem/manifest.go && git diff --check` | PASS |
+| `GOTOOLCHAIN=go1.27.1 go mod tidy` with pre/post `go.mod` and `go.sum` SHA-256 comparison | PASS; no dependency mutation |
+
+Runtime evidence: N/A — this is a read-only library boundary exercised with `t.TempDir()`; no CLI is in scope. Rollback: remove `internal/adapters/filesystem/manifest.go` and the matching documentation/progress section without affecting the parser-only PR02A-1 work.
+
+### TDD Cycle Evidence
+
+| Task | RED | GREEN | TRIANGULATE | REFACTOR |
+| --- | --- | --- | --- | --- |
+| PR02A-2 loader | Committed RED above; corrections RED observed for unlisted `nested/roadmap.yaml` and unlisted `extra.yaml` symlink | Focused loader suite passes after exempting only the root manifest and rejecting the unlisted YAML symlink without following it | Existing nested/multiple, symlink-intermediate, unsafe-YAML, size, and unlisted-case tests pass | `gofmt`; behavior unchanged |
+
+### Safety caveat and remaining work
+
+Checks occur before `os.ReadFile`, avoiding intentional FIFO reads. This non-mutating cooperative boundary cannot guarantee safety against a hostile concurrent TOCTOU replacement; it makes no universal-race claim. Deferred: schema resolution, canonical hashing, typed module validation/contracts, and CLI.
+
+**Historical source-state note:** this pre-merge record said “Pending GREEN commit: parent retains Git authority; no commit, push, reset, or other worktree/authority mutation was performed here.” It is preserved as historical evidence only; PR02A-2 is now merged as recorded in the current checkpoint.
+
+### Status and remaining persisted work
+
+```yaml
+changeName: bootstrap-roadmapcontrol
+artifactStore: openspec
+applyState: ready
+actionContext:
+  mode: repo-local
+  workspaceRoot: /home/andyf/Projects/RoadmapControl-pr02a2
+  allowedEditRoots: [internal/adapters/filesystem, docs, openspec/changes/bootstrap-roadmapcontrol]
+  warnings: [PR-02 remains incomplete beyond PR02A-2]
+```
+
+Exact unchecked persisted completion lines remain (global, untouched):
+- [ ] Each PR has a verified additions+deletions count of 400 or less before review; an indivisible overage stops for an audited owner `size:exception`.
+- [ ] Each behavioral PR contains RED → GREEN → TRIANGULATE → REFACTOR evidence, focused/cumulative tests, runtime evidence or N/A, and its own docs.
+- [ ] Every requirement in `specs/roadmap-domain`, `task-execution`, `delivery-release`, `github-operations`, `synchronization`, `agent-integration`, and `audit-lifecycle` is covered by at least one listed slice.
+- [ ] PR-21 proves one complete validated control loop before PR-22 enables prospective dogfooding.
+- [ ] No implementation, commit, push, issue, PR, GitHub permission/App change, or repository-rule mutation is performed by this planning phase.
+
+## Key Learnings
+
+1. Validate each component below the selected root to reject an intermediate symlink escape.
+2. A pre-read regular-file and size check reduces accidental unsafe reads without eliminating hostile races.
+3. A literal `urn:other` schema is rejected even though it is an otherwise valid URI.
+4. The policy `kind` field accepts only the string value `policy`.
+5. Additional tracker types require a sequence whose items are all strings.
+
+## Historical inherited record — PR02B1 typed policy contract (local implementation complete)
+
+- **PR boundary:** PR02B1 in the approved `feature-branch-chain`, between PR02A-2 and PR02B2. This slice is the read-only policy contract only; it neither acquires nor settles authority, changes filesystem loading, adds serialization, installs `.roadmap/`, nor publishes or merges a candidate.
+- **Completed persisted task:** PR02B1 issue #39 is marked `- [x]` in `tasks.md`; it is locally implemented and verified. The original PR-02, PR02B2, and PR02C remain incomplete. Independent verification and Judgment Day are pending; no delivery commit or push occurred.
+- **Files changed:** `internal/domain/roadmap/module.go`, `internal/domain/roadmap/module_test.go`, `docs/roadmap-format.md`, `openspec/changes/bootstrap-roadmapcontrol/tasks.md`, and this progress file.
+- **Review budget:** 239 additions + deletions against `a3fcaa0244f1a3764655b74655b69c1dc5657b67`, including the committed RED test, working-tree code, tests, docs, tasks, and progress. It is within the 400-line PR02B1 budget.
+- **Contract:** `ParsePolicyRoadmap` accepts only the exact RoadmapControl schema URI and exactly `policy.yaml`; it validates one safe, closed YAML mapping by inspecting `yaml.Node` fields (not arbitrary decoding). `PolicyRoadmap` has private fields and defensive accessors. Empty sequences are non-nil; empty, duplicate, and built-in tracker names are structurally allowed.
+- **Design deviation:** none. Future PR02B2 may read the private policy state but receives no mutability API or serialization method in this slice.
+
+### Verification
+
+| Command | Result |
+| --- | --- |
+| `GOTOOLCHAIN=go1.27.1 go test -count=1 ./internal/domain/roadmap/...` (safety net) | PASS |
+| `GOTOOLCHAIN=go1.27.1 go test -count=1 ./internal/domain/roadmap/...` (RED) | FAIL as expected: `undefined: RoadmapSchemaURI` and `undefined: ParsePolicyRoadmap` |
+| `GOTOOLCHAIN=go1.27.1 go test -count=1 ./internal/domain/roadmap/...` (GREEN) | PASS |
+| `GOTOOLCHAIN=go1.27.1 go test -count=1 ./internal/domain/roadmap/...` (TRIANGULATE) | Initially FAIL: empty sequence accessor returned `[]string(nil)`; PASS after defensive-copy correction |
+| `gofmt -w internal/domain/roadmap/module.go internal/domain/roadmap/module_test.go && git diff --check` | PASS |
+| `GOTOOLCHAIN=go1.27.1 go test -count=1 ./internal/domain/roadmap/...` | PASS |
+| `GOTOOLCHAIN=go1.27.1 go test ./...` | PASS |
+
+Latest local triangulation adds rejection coverage for `urn:other`, missing required fields, non-mapping policies, invalid `kind` node forms, and scalar or mapping `additional_tracker_types`; focused and full Go 1.27.1 suites pass. Independent verification, Judgment Day, and delivery remain pending.
+
+Runtime evidence: N/A — this is a pure read-only domain parser; no runtime or filesystem boundary is in this PR.
+
+### TDD Cycle Evidence
+
+| Task | Test file | Layer | Safety net | RED | GREEN | TRIANGULATE | REFACTOR |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| PR02B1 typed policy contract | `internal/domain/roadmap/module_test.go` | Unit | Focused package PASS | Committed local RED `6d18c2c5c31b46bb48c1ddddf576cf1a3999f9ea`; observed undefined API failure | Minimal node-inspecting parser PASS | Valid/rejection table plus empty, duplicate, built-in, wrong URI/path/modules, missing fields, null and invalid node kinds, unsafe YAML, and isolation cases PASS; empty-sequence failure corrected | `gofmt` and `git diff --check` PASS; no behavior change |
+
+### Status consumed
+
+```yaml
+schemaName: gentle-ai.sdd-status
+schemaVersion: 2
+changeName: bootstrap-roadmapcontrol
+artifactStore: openspec
+applyState: ready
+actionContext:
+  mode: repo-local
+  workspaceRoot: /home/andyf/Projects/RoadmapControl-pr02b1
+  allowedEditRoots:
+    - /home/andyf/Projects/RoadmapControl-pr02b1
+warnings:
+  - Whole-change verify and archive remain blocked.
+  - Independent verification and Judgment Day remain pending for PR02B1.
+```
+
+### Remaining persisted work
+
+- [ ] Each PR has a verified additions+deletions count of 400 or less before review; an indivisible overage stops for an audited owner `size:exception`.
+- [ ] Each behavioral PR contains RED → GREEN → TRIANGULATE → REFACTOR evidence, focused/cumulative tests, runtime evidence or N/A, and its own docs.
+- [ ] Every requirement in `specs/roadmap-domain`, `task-execution`, `delivery-release`, `github-operations`, `synchronization`, `agent-integration`, and `audit-lifecycle` is covered by at least one listed slice.
+- [ ] PR-21 proves one complete validated control loop before PR-22 enables prospective dogfooding.
+- [ ] No implementation, commit, push, issue, PR, GitHub permission/App change, or repository-rule mutation is performed by this planning phase.
+
+## PR02B2 — canonical policy JSON (local implementation complete)
+
+- **PR boundary:** PR02B2 is the current `feature-branch-chain` child between published draft PR02B1/PR #42 and PR02C. It only adds canonical policy serialization, its tests, documentation, and its approved direct dependency. It does not acquire or settle authority, alter B1 parsing or filesystem behavior, publish, push, create a delivery commit, or open a PR.
+- **Completed persisted task:** the approved issue #40 B2 task is visibly marked `- [x]` in `tasks.md`. PR-02 as a whole, PR02C, and the global completion checks remain unchecked.
+- **Files changed:** `internal/domain/roadmap/canonical.go`, `internal/domain/roadmap/canonical_test.go`, `docs/roadmap-format.md`, `go.mod`, `go.sum`, `openspec/changes/bootstrap-roadmapcontrol/tasks.md`, and this progress record.
+- **Contract:** `PolicyRoadmap.CanonicalJSON()` validates the closed aggregate state and every fixed-aggregate string before `json.Marshal`, then passes only successful typed JSON to `jcs.Transform`. Its fixed private aggregate emits `modules` before `schema`, then `kind`, `path`, and `policy`, with `additional_tracker_types` preserving empty arrays and source order. No map, `any`, raw JSON, custom marshaler, or numeric API was introduced.
+- **Dependency integrity:** direct `github.com/gowebpki/jcs v1.0.1` is the only new production dependency. `git ls-remote` confirmed `v1.0.1` at approved tag `1a4242a66e1a8e03d7458324d0bc95c327527cbb`; `go list -deps ./...` lists only the production module, JCS, and existing YAML dependency outside the standard library. `go.sum` adds JCS's upstream test-only checksum metadata (`testify` and its test dependencies); it does not add a production import. `go mod tidy` made no mutation after the approved dependency update.
+- **Review budget:** base-relative count is intentionally omitted here to avoid a self-referential stale ledger; the executor reports the exact final `git diff --numstat 4a1ed67` count to the parent after all writes. This cohesive slice remains subject to the 400-line child-PR limit.
+- **Runtime evidence:** N/A — this is a deterministic read-only library method with no runtime, CLI, or filesystem boundary.
+- **Design deviation:** none. B2 adds bounded parser-surrogate regression coverage only: existing `ParsePolicyRoadmap` rejects `\uD800`, `\uD800\u0041`, and `\uDC00\uD800`, while a literal valid U+FFFD parses and canonically serializes. No B1 source changes are required.
+
+### Verification
+
+| Command | Result |
+| --- | --- |
+| `GOTOOLCHAIN=go1.27.1 go test -count=1 ./internal/domain/roadmap/... -run '^TestPolicyRoadmapCanonicalJSON$'` | Historical original RED failed as expected: `PolicyRoadmap.CanonicalJSON undefined` |
+| `GOTOOLCHAIN=go1.27.1 go test -count=1 ./internal/domain/roadmap/... -run '^TestPolicyRoadmapCanonicalJSON$'` | Historical original GREEN PASS after the minimal typed implementation |
+| `GOTOOLCHAIN=go1.27.1 go test -count=1 ./internal/domain/roadmap/... -run '^TestPolicyRoadmapCanonicalJSONPreservesEmptyTrackerTypes$'` | Correction RED observed: parsed non-nil empty tracker types serialized as `null`, not the required `[]` |
+| `GOTOOLCHAIN=go1.27.1 go test -count=1 ./internal/domain/roadmap/... -run '^TestPolicyRoadmapCanonicalJSONPreservesEmptyTrackerTypes$'` | Correction GREEN PASS after the non-nil empty copy fix |
+| `GOTOOLCHAIN=go1.27.1 go test -count=1 ./internal/domain/roadmap/...` | Current focused verification PASS after the correction |
+| `GOTOOLCHAIN=go1.27.1 go test -count=1 ./...` | Current full verification PASS after the correction |
+| `GOTOOLCHAIN=go1.27.1 go mod tidy` with before/after SHA-256 | PASS; no mutation |
+| `gofmt -w internal/domain/roadmap/canonical.go internal/domain/roadmap/canonical_test.go && git diff --check` | PASS |
+
+### TDD Cycle Evidence
+
+| Task | Test file | Layer | Safety net | RED | GREEN | TRIANGULATE | REFACTOR |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| PR02B2 canonical policy JSON | `internal/domain/roadmap/canonical_test.go` | Unit | Historical initial probe found parsed non-nil empty tracker types serializing as `null` rather than `[]` | Local committed RED `061285dc0a7f3aa596f4fc26425c2d78e3751d82` observed undefined `CanonicalJSON`; correction RED observed the exact empty-array regression | Historical exact representative vector passed; correction GREEN passed after preserving a non-nil empty copy | Empty/list-order, Unicode (CJK, emoji, literal U+FFFD, HTML, quotes, slash, controls, composed/decomposed), output isolation, zero/invalid state, every private fixed-aggregate string position, and parser rejection of the three bounded surrogate escapes passed current focused and full verification | `gofmt` and `git diff --check` PASS after the correction |
+
+### Status consumed
+
+```yaml
+schemaName: gentle-ai.sdd-status
+schemaVersion: 2
+changeName: bootstrap-roadmapcontrol
+artifactStore: openspec
+applyState: ready
+actionContext:
+  mode: repo-local
+  workspaceRoot: /home/andyf/Projects/RoadmapControl-pr02b2
+  allowedEditRoots:
+    - /home/andyf/Projects/RoadmapControl-pr02b2
+warnings:
+  - Whole-change verify and archive remain blocked.
+  - PR02B2 requires independent verification and Judgment Day before delivery.
+```
+
+### Remaining persisted work
+
+- [ ] Each PR has a verified additions+deletions count of 400 or less before review; an indivisible overage stops for an audited owner `size:exception`.
+- [ ] Each behavioral PR contains RED → GREEN → TRIANGULATE → REFACTOR evidence, focused/cumulative tests, runtime evidence or N/A, and its own docs.
+- [ ] Every requirement in `specs/roadmap-domain`, `task-execution`, `delivery-release`, `github-operations`, `synchronization`, `agent-integration`, and `audit-lifecycle` is covered by at least one listed slice.
+- [ ] PR-21 proves one complete validated control loop before PR-22 enables prospective dogfooding.
+- [ ] No implementation, commit, push, issue, PR, GitHub permission/App change, or repository-rule mutation is performed by this planning phase.
