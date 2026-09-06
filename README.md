@@ -62,6 +62,7 @@ go run ./cmd/roadmapctl --help
 - [Governance documentation tracker](docs/governance/README.md)
 - [Approved bootstrap proposal](openspec/changes/bootstrap-roadmapcontrol/proposal.md)
 - [Implementation plan](openspec/changes/bootstrap-roadmapcontrol/tasks.md)
+- [Approved PR02B contract addendum](openspec/changes/bootstrap-roadmapcontrol/pr-02b-contract-proposal.md)
 
 ## License
 
